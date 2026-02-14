@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from '@/hooks/use-toast';
 import { productService } from '@/services/product.service';
 import { ProductFilters, CreateProductDTO, UpdateProductDTO } from '@/types/product';
 
@@ -32,16 +33,33 @@ export const useProductMutations = () => {
 
     const createMutation = useMutation({
         mutationFn: (newProduct: CreateProductDTO) => productService.create(newProduct),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
+        onSuccess: (data) => {
+            // Manually update cache to simulate persistence (since DummyJSON doesn't save)
+            queryClient.setQueriesData({ queryKey: ['products'] }, (old: any) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    products: [data, ...old.products],
+                    total: old.total + 1
+                };
+            });
         },
     });
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: number; data: UpdateProductDTO }) => productService.update(id, data),
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
+            // Update detail view
             queryClient.setQueryData(['product', data.id], data);
+
+            // Update list view (simulate persistence)
+            queryClient.setQueriesData({ queryKey: ['products'] }, (old: any) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    products: old.products.map((p: any) => p.id === data.id ? data : p),
+                };
+            });
         },
     });
 

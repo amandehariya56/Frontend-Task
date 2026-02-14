@@ -115,6 +115,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
     };
 
     const onSubmit = (values: ProductFormValues) => {
+        console.log("Submitting form with values:", values);
         if (!values.thumbnail) {
             toast({ title: "Validation Error", description: "Thumbnail is required", variant: "destructive" });
             return;
@@ -128,7 +129,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
                         toast({ title: "Product updated", description: "Product updated successfully" });
                         navigate("/products");
                     },
-                    onError: () => {
+                    onError: (error) => {
+                        console.error("Update error:", error);
                         toast({ title: "Error", description: "Failed to update product", variant: "destructive" });
                     }
                 }
@@ -139,7 +141,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
                     toast({ title: "Product created", description: "Product created successfully" });
                     navigate("/products");
                 },
-                onError: () => {
+                onError: (error) => {
+                    console.error("Create error:", error);
                     toast({ title: "Error", description: "Failed to create product", variant: "destructive" });
                 }
             });
@@ -148,7 +151,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log("Form Validation Errors:", errors))} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                         <FormField
