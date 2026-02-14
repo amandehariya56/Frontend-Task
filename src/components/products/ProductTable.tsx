@@ -138,8 +138,8 @@ export function ProductTable() {
                         <SelectContent>
                             <SelectItem value="all">All Categories</SelectItem>
                             {categories?.map((cat) => (
-                                <SelectItem key={cat.slug || cat.name || cat} value={cat.slug || cat.name || cat}>
-                                    {cat.slug || cat.name || cat}
+                                <SelectItem key={cat} value={cat}>
+                                    {cat}
                                 </SelectItem>
                             ))}
                         </SelectContent>

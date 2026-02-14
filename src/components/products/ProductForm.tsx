@@ -33,7 +33,7 @@ const productSchema = z.object({
     brand: z.string().min(2, "Brand is required"),
     category: z.string().min(1, "Category is required"),
     thumbnail: z.string().url("Thumbnail is required").or(z.literal("")), // Validation handled manually for file
-    images: z.array(z.string().url()).optional(),
+    images: z.array(z.string().url()).default([]),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -51,7 +51,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
     const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
     const [isUploadingImages, setIsUploadingImages] = useState(false);
 
-    const form = useForm<ProductFormValues>({
+    const form = useForm({
         resolver: zodResolver(productSchema),
         defaultValues: {
             title: initialData?.title || "",
@@ -187,7 +187,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
                                     <FormItem>
                                         <FormLabel>Price ($)</FormLabel>
                                         <FormControl>
-                                            <Input type="number" step="0.01" {...field} />
+                                            <Input type="number" step="0.01" {...field} value={field.value as number} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -200,7 +200,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
                                     <FormItem>
                                         <FormLabel>Discount (%)</FormLabel>
                                         <FormControl>
-                                            <Input type="number" step="0.1" {...field} />
+                                            <Input type="number" step="0.1" {...field} value={field.value as number} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -216,7 +216,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
                                     <FormItem>
                                         <FormLabel>Stock</FormLabel>
                                         <FormControl>
-                                            <Input type="number" {...field} />
+                                            <Input type="number" {...field} value={field.value as number} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -251,8 +251,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
                                         </FormControl>
                                         <SelectContent>
                                             {categories?.map((cat) => (
-                                                <SelectItem key={cat.slug || cat.name || cat} value={cat.slug || cat.name || cat}>
-                                                    {cat.slug || cat.name || cat}
+                                                <SelectItem key={cat} value={cat}>
+                                                    {cat}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
