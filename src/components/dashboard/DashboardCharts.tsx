@@ -17,7 +17,7 @@ export function CategoryDistributionChart({ data }: ChartProps) {
             </CardHeader>
             <CardContent className="pl-2">
                 <div className="h-[300px] w-full min-w-0">
-                    <ResponsiveContainer width="99%" height="100%">
+                    <ResponsiveContainer width="99%" height="100%" minWidth={0}>
                         <PieChart>
                             <Pie
                                 data={data}
@@ -50,7 +50,7 @@ export function PriceRangeChart({ data }: ChartProps) {
             </CardHeader>
             <CardContent className="pl-2">
                 <div className="h-[300px] w-full min-w-0">
-                    <ResponsiveContainer width="99%" height="100%">
+                    <ResponsiveContainer width="99%" height="100%" minWidth={0}>
                         <BarChart data={data}>
                             <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
                             <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
@@ -72,7 +72,7 @@ export function TopRatedChart({ data }: ChartProps) {
             </CardHeader>
             <CardContent className="pl-2">
                 <div className="h-[300px] w-full min-w-0">
-                    <ResponsiveContainer width="99%" height="100%">
+                    <ResponsiveContainer width="99%" height="100%" minWidth={0}>
                         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                             <XAxis type="number" hide />
                             <YAxis dataKey="name" type="category" width={100} stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
