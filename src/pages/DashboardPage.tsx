@@ -39,7 +39,6 @@ export default function DashboardPage() {
                 <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             </div>
 
-            {/* Stat Cards */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatCard
                     title="Total Products"
@@ -80,7 +79,6 @@ export default function DashboardPage() {
                 />
             </div>
 
-            {/* Charts */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <div className="col-span-4">
                     <PriceRangeChart data={stats.priceRanges} title="Price Distribution" />

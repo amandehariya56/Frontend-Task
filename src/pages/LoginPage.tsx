@@ -41,7 +41,7 @@ export default function LoginPage() {
 
     const from = location.state?.from?.pathname || '/';
 
-    // Redirect if already logged in
+
     useEffect(() => {
         if (isAuthenticated) {
             navigate(from, { replace: true });
@@ -51,7 +51,7 @@ export default function LoginPage() {
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            username: 'emilys', // Default for easier testing
+            username: 'emilys',
             password: 'emilyspass',
         },
     });

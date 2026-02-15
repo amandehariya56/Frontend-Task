@@ -14,17 +14,16 @@ export interface DashboardStats {
 
 export const dashboardService = {
   getStats: async (): Promise<DashboardStats> => {
-    // Parallel fetch
     const [productsRes, usersRes] = await Promise.all([
-      api.get('/products?limit=100'), // Get 100 products for sample analytics
-      api.get('/users?limit=30'), // Get default users to avoid large payload/timeouts
+      api.get('/products?limit=100'),
+      api.get('/users?limit=30'),
     ]);
 
     const products = productsRes.data.products;
     const totalProducts = productsRes.data.total;
     const totalUsers = usersRes.data.total;
 
-    // Calculations
+
     const lowStockCount = products.filter((p: any) => p.stock < 10).length;
     const totalRating = products.reduce((acc: number, p: any) => acc + p.rating, 0);
     const averageRating = products.length ? totalRating / products.length : 0;
@@ -32,7 +31,7 @@ export const dashboardService = {
     const totalPrice = products.reduce((acc: number, p: any) => acc + p.price, 0);
     const averagePrice = products.length ? totalPrice / products.length : 0;
 
-    // Category Distribution (Top 5 + Others)
+
     const categoryMap: Record<string, number> = {};
     products.forEach((p: any) => {
       categoryMap[p.category] = (categoryMap[p.category] || 0) + 1;
@@ -50,7 +49,7 @@ export const dashboardService = {
       topCategories.push({ name: 'Others', value: otherCount });
     }
 
-    // Price Ranges
+
     const ranges = {
       '0-50': 0,
       '50-100': 0,
@@ -65,7 +64,7 @@ export const dashboardService = {
     });
     const priceRanges = Object.entries(ranges).map(([name, value]) => ({ name, value }));
 
-    // Top Rated
+
     const topRatedProducts = [...products]
       .sort((a: any, b: any) => b.rating - a.rating)
       .slice(0, 5)

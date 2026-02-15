@@ -6,7 +6,7 @@ export const authService = {
         const { data } = await api.post<any>('/auth/login', {
             username,
             password,
-            expiresInMins: 1, // Short expiry to test refresh logic as requested
+            expiresInMins: 1,
         });
 
         return {

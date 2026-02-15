@@ -2,9 +2,9 @@ import { useSettingsStore } from "@/stores/useSettingsStore";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch } from "@/components/ui/switch";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// Switch might be missing in ui, will check or strictly use Select/Radio
+
 
 export default function SettingsPage() {
     const { theme, tableDensity, sidebarDefaultOpen, setTheme, setTableDensity, setSidebarDefaultOpen } = useSettingsStore();

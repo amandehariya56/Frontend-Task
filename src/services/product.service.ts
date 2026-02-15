@@ -31,10 +31,7 @@ export const productService = {
 
     getCategories: async (): Promise<string[]> => {
         const { data } = await api.get<string[]>('/products/categories');
-        // Ensure we return just strings (DummyJSON might return objects sometimes based on version, but usually strings)
-        // The current version returns: [{slug: '...', name: '...'}, ...] OR ['...', '...']. 
-        // Standard DummyJSON returns generic list. I'll assume list of objects if the array consists of objects, otherwise strings.
-        // Let's safe guard.
+
         if (data.length > 0 && typeof data[0] === 'object') {
             return (data as any[]).map((c: any) => c.slug || c.name);
         }

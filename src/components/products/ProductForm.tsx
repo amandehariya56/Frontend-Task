@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
     Form,
     FormControl,
@@ -23,7 +24,7 @@ import { useProductMutations, useProductCategories } from "@/hooks/useProducts";
 import { useNavigate } from "react-router-dom";
 import { Loader2, X, UploadCloud } from "lucide-react";
 
-// Schema
+
 const productSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters"),
     description: z.string().min(10, "Description must be at least 10 characters"),
@@ -32,7 +33,7 @@ const productSchema = z.object({
     stock: z.coerce.number().min(0, "Stock cannot be negative"),
     brand: z.string().min(2, "Brand is required"),
     category: z.string().min(1, "Category is required"),
-    thumbnail: z.string().url("Thumbnail is required").or(z.literal("")), // Validation handled manually for file
+    thumbnail: z.string().url("Thumbnail is required").or(z.literal("")),
     images: z.array(z.string().url()).default([]),
 });
 
@@ -82,8 +83,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
             const url = await uploadService.uploadImage(file);
             form.setValue("thumbnail", url);
             toast({ title: "Success", description: "Thumbnail uploaded successfully" });
-        } catch (error) {
-            toast({ title: "Error", description: "Failed to upload thumbnail", variant: "destructive" });
+        } catch (error: any) {
+            toast({ title: "Error", description: error.message || "Failed to upload thumbnail", variant: "destructive" });
         } finally {
             setIsUploadingThumbnail(false);
         }
@@ -101,8 +102,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
             const currentImages = form.getValues("images") || [];
             form.setValue("images", [...currentImages, ...urls]);
             toast({ title: "Success", description: `${urls.length} images uploaded` });
-        } catch (error) {
-            toast({ title: "Error", description: "Failed to upload images", variant: "destructive" });
+        } catch (error: any) {
+            toast({ title: "Error", description: error.message || "Failed to upload images", variant: "destructive" });
         } finally {
             setIsUploadingImages(false);
         }
@@ -115,7 +116,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
     };
 
     const onSubmit = (values: ProductFormValues) => {
-        console.log("Submitting form with values:", values);
         if (!values.thumbnail) {
             toast({ title: "Validation Error", description: "Thumbnail is required", variant: "destructive" });
             return;
@@ -151,7 +151,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log("Form Validation Errors:", errors))} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                         <FormField
@@ -267,9 +267,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
                     </div>
 
                     <div className="space-y-6">
-                        {/* Thumbnail Upload */}
                         <div className="space-y-4">
-                            <FormLabel>Thumbnail</FormLabel>
+                            <Label>Thumbnail</Label>
                             <div className="flex items-center gap-4">
                                 {form.watch("thumbnail") && (
                                     <div className="relative h-32 w-32 border rounded-md overflow-hidden">
@@ -297,9 +296,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
                             </div>
                         </div>
 
-                        {/* Multiple Images Upload */}
                         <div className="space-y-4">
-                            <FormLabel>Gallery Images</FormLabel>
+                            <Label>Gallery Images</Label>
                             <div className="grid grid-cols-3 gap-4">
                                 {form.watch("images")?.map((url, index) => (
                                     <div key={index} className="relative aspect-square border rounded-md overflow-hidden">

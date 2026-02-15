@@ -7,7 +7,7 @@ export const useProducts = (filters: ProductFilters) => {
     return useQuery({
         queryKey: ['products', filters],
         queryFn: () => productService.getAll(filters),
-        placeholderData: (previousData) => previousData, // keep previous data while fetching new page
+        placeholderData: (previousData) => previousData,
         staleTime: 5000,
     });
 };
@@ -24,7 +24,7 @@ export const useProductCategories = () => {
     return useQuery({
         queryKey: ['product-categories'],
         queryFn: productService.getCategories,
-        staleTime: Infinity, // categories rarely change
+        staleTime: Infinity,
     });
 };
 
@@ -34,7 +34,6 @@ export const useProductMutations = () => {
     const createMutation = useMutation({
         mutationFn: (newProduct: CreateProductDTO) => productService.create(newProduct),
         onSuccess: (data) => {
-            // Manually update cache to simulate persistence (since DummyJSON doesn't save)
             queryClient.setQueriesData({ queryKey: ['products'] }, (old: any) => {
                 if (!old) return old;
                 return {
@@ -49,10 +48,8 @@ export const useProductMutations = () => {
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: number; data: UpdateProductDTO }) => productService.update(id, data),
         onSuccess: (data) => {
-            // Update detail view
             queryClient.setQueryData(['product', data.id], data);
 
-            // Update list view (simulate persistence)
             queryClient.setQueriesData({ queryKey: ['products'] }, (old: any) => {
                 if (!old) return old;
                 return {

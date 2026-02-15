@@ -16,33 +16,30 @@ export function ProductTable() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // URL State
     const searchParam = searchParams.get('search') || '';
     const categoryParam = searchParams.get('category') || 'all';
+
     const sortByParam = searchParams.get('sortBy') || 'id';
     const orderParam = (searchParams.get('order') as 'asc' | 'desc') || 'asc';
     const pageParam = Number(searchParams.get('page')) || 1;
     const limit = 10;
     const skip = (pageParam - 1) * limit;
 
-    // Local State for Input (Debounce)
     const [searchInput, setSearchInput] = useState(searchParam);
     const debouncedSearch = useDebounce(searchInput, 300);
 
-    // Sync Debounced Search to URL
     useEffect(() => {
         if (debouncedSearch !== searchParam) {
             setSearchParams(prev => {
                 const newParams = new URLSearchParams(prev);
                 if (debouncedSearch) newParams.set('search', debouncedSearch);
                 else newParams.delete('search');
-                newParams.set('page', '1'); // Reset to page 1 on search
+                newParams.set('page', '1');
                 return newParams;
             });
         }
     }, [debouncedSearch, setSearchParams, searchParam]);
 
-    // Derived Filters for Query
     const filters: ProductFilters = {
         search: searchParam,
         category: categoryParam,
@@ -56,7 +53,6 @@ export function ProductTable() {
     const { data: categories } = useProductCategories();
     const { deleteMutation } = useProductMutations();
 
-    // Bulk Selection State
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
     const totalPages = data ? Math.ceil(data.total / limit) : 0;
@@ -97,7 +93,6 @@ export function ProductTable() {
 
     const handleBulkDelete = () => {
         if (confirm(`Delete ${selectedIds.length} products?`)) {
-            // In a real app, send array of IDs. For DummyJSON, we loop.
             selectedIds.forEach(id => deleteMutation.mutate(id));
             setSelectedIds([]);
         }
@@ -163,7 +158,7 @@ export function ProductTable() {
                         <TableRow>
                             <TableHead className="w-[40px]">
                                 <Checkbox
-                                    checked={data && data.products.length > 0 && selectedIds.length === data.products.length}
+                                    checked={(data && data.products.length > 0 && selectedIds.length === data.products.length) || false}
                                     onCheckedChange={(checked) => toggleSelectAll(!!checked)}
                                 />
                             </TableHead>

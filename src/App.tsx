@@ -18,26 +18,26 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected Routes */}
+
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<DashboardPage />} />
 
-            {/* Products Module */}
+
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/add" element={<ProductAddPage />} />
             <Route path="/products/:id" element={<ProductDetailPage />} />
             <Route path="/products/:id/edit" element={<ProductEditPage />} />
 
-            {/* Users Module */}
+
             <Route path="/users" element={<UsersPage />} />
 
-            {/* Settings */}
+
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
         </Route>
 
-        {/* Fallback */}
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster />

@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/useAuthStore';
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -61,33 +54,7 @@ export function Header() {
                 </SheetContent>
             </Sheet>
 
-            <Breadcrumb className="hidden md:flex">
-                <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink asChild>
-                            <Link to="/">Dashboard</Link>
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    {paths.map((path, index) => {
-                        const href = `/${paths.slice(0, index + 1).join('/')}`;
-                        const isLast = index === paths.length - 1;
-                        return (
-                            <div key={path} className="flex items-center">
-                                <BreadcrumbSeparator />
-                                <BreadcrumbItem>
-                                    {isLast ? (
-                                        <BreadcrumbPage className="capitalize">{path}</BreadcrumbPage>
-                                    ) : (
-                                        <BreadcrumbLink asChild>
-                                            <Link to={href} className="capitalize">{path}</Link>
-                                        </BreadcrumbLink>
-                                    )}
-                                </BreadcrumbItem>
-                            </div>
-                        );
-                    })}
-                </BreadcrumbList>
-            </Breadcrumb>
+
 
             <div className="relative ml-auto flex-1 md:grow-0">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

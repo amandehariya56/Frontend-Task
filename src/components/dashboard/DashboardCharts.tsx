@@ -1,5 +1,6 @@
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
 
 interface ChartProps {
     data: any[];
@@ -15,15 +16,15 @@ export function CategoryDistributionChart({ data }: ChartProps) {
                 <CardTitle>Category Distribution</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-                <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[300px] w-full min-w-0">
+                    <ResponsiveContainer width="99%" height="100%">
                         <PieChart>
                             <Pie
                                 data={data}
                                 cx="50%"
                                 cy="50%"
                                 labelLine={false}
-                                outerRadius={100}
+                                outerRadius={80}
                                 fill="#8884d8"
                                 dataKey="value"
                             >
@@ -48,8 +49,8 @@ export function PriceRangeChart({ data }: ChartProps) {
                 <CardTitle>Price Ranges</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-                <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[300px] w-full min-w-0">
+                    <ResponsiveContainer width="99%" height="100%">
                         <BarChart data={data}>
                             <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
                             <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
@@ -70,8 +71,8 @@ export function TopRatedChart({ data }: ChartProps) {
                 <CardTitle>Top Rated Products</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-                <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[300px] w-full min-w-0">
+                    <ResponsiveContainer width="99%" height="100%">
                         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                             <XAxis type="number" hide />
                             <YAxis dataKey="name" type="category" width={100} stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />

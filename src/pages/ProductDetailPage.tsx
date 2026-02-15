@@ -23,7 +23,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Images */}
+
                 <div className="space-y-4">
                     <div className="aspect-square rounded-lg border overflow-hidden">
                         <img src={product.thumbnail} alt={product.title} className="w-full h-full object-cover" />
@@ -37,7 +37,7 @@ export default function ProductDetailPage() {
                     </div>
                 </div>
 
-                {/* Details */}
+
                 <div className="space-y-6">
                     <div>
                         <h1 className="text-3xl font-bold">{product.title}</h1>

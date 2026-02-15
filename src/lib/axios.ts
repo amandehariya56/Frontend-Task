@@ -13,21 +13,20 @@ const api = axios.create({
     },
 });
 
-// Request Interceptor
+
 api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         const token = useAuthStore.getState().token;
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        // Add timestamp as requested - REMOVED to avoid potential CORS/Network issues
-        // config.headers['x-timestamp'] = Date.now().toString();
+
         return config;
     },
     (error) => Promise.reject(error)
 );
 
-// Response Interceptor
+
 let isRefreshing = false;
 let failedQueue: FailedRequest[] = [];
 
@@ -47,7 +46,7 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        // Handle 401 Unauthorized
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
                 return new Promise<string>((resolve, reject) => {
@@ -70,22 +69,22 @@ api.interceptors.response.use(
                     throw new Error('No refresh token available');
                 }
 
-                // Call refresh endpoint directly (bypassing interceptors)
+
                 const { data } = await axios.post('https://dummyjson.com/auth/refresh', {
                     refreshToken,
-                    expiresInMins: 30, // Extend session
+                    expiresInMins: 30,
                 });
 
                 const { token: newToken, refreshToken: newRefreshToken, accessToken } = data;
                 const finalToken = newToken || accessToken;
 
-                // Update tokens in store
+
                 useAuthStore.getState().updateToken(finalToken, newRefreshToken);
 
-                // Retry failed requests
+
                 processQueue(null, finalToken);
 
-                // Retry original request
+
                 originalRequest.headers.Authorization = `Bearer ${finalToken}`;
                 return api(originalRequest);
             } catch (refreshError) {
